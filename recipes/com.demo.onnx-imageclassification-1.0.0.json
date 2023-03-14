@@ -1,54 +1,54 @@
 {
-    "RecipeFormatVersion": "2020-01-25",
-    "ComponentName": "com.demo.onnx-imageclassification",
-    "ComponentVersion": "1.0.0",
-    "ComponentDescription": "A component that runs an inference for image classification using ONNX Runtime and a pretrained Resnet50 neural network",
-    "ComponentPublisher": "Amazon",
-    "ComponentConfiguration": {
-      "DefaultConfiguration": {
-        "accessControl": {
-          "aws.greengrass.ipc.mqttproxy": {
-            "com.demo.greengrass-onnx:mqttproxy:1" :{
-              "policyDescription": "Publish inference results to topic",
-              "operations": [
-                "aws.greengrass#PublishToIoTCore"
-              ],
-              "resources": [
-                "*"
-              ]
-            }
+  "RecipeFormatVersion": "2020-01-25",
+  "ComponentName": "com.demo.onnx-imageclassification",
+  "ComponentVersion": "1.0.0",
+  "ComponentDescription": "A component that runs an inference for image classification using ONNX Runtime and a pretrained Resnet50 neural network",
+  "ComponentPublisher": "Amazon",
+  "ComponentConfiguration": {
+    "DefaultConfiguration": {
+      "accessControl": {
+        "aws.greengrass.ipc.mqttproxy": {
+          "com.demo.greengrass-onnx:mqttproxy:1": {
+            "policyDescription": "Publish inference results to topic",
+            "operations": [
+              "aws.greengrass#PublishToIoTCore"
+            ],
+            "resources": [
+              "*"
+            ]
           }
         }
       }
-    },
-   "ComponentDependencies": {
+    }
+  },
+  "ComponentDependencies": {
     "com.demo.onnxruntime": {
       "VersionRequirement": ">=1.0.0",
       "DependencyType": "HARD"
     }
   },
-    "Manifests": [
-      {
-        "Platform": {
-          "os": "linux"
+  "Manifests": [
+    {
+      "Platform": {
+        "os": "linux"
+      },
+      "Lifecycle": {
+        "Install": {
+          "RequiresPrivilege": true,
+          "Script": "python3 -m pip install awsiotsdk Pillow",
+          "timeout": "900"
         },
-        "Lifecycle": {
-           "Install": {
-            "RequiresPrivilege": true,
-            "Script": "python3 -m pip install awsiotsdk Pillow",
-            "timeout": "900"
-          },
-          "Run": {
-            "RequiresPrivilege": true, 
-            "Script" : "python3 {artifacts:decompressedPath}/greengrass-onnx/gg-onnx.py"
-          }
-        },
-        "Artifacts": [
+        "Run": {
+          "RequiresPrivilege": true,
+          "Script": "python3 {artifacts:decompressedPath}/greengrass-onnx/gg-onnx.py"
+        }
+      },
+      "Artifacts": [
         {
-          "URI": "s3://gg-onnx-component-test/greengrass-onnx.zip",
+          "URI": "s3://{YOUR-S3-BUCKET}/greengrass-onnx.zip",
           "Unarchive": "ZIP"
         }
       ]
-      }
-        ]
-      }
+    }
+  ]
+}
