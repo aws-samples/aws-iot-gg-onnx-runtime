@@ -1,0 +1,21 @@
+{
+    "RecipeFormatVersion": "2020-01-25",
+    "ComponentName": "com.demo.onnxruntime",
+    "ComponentVersion": "1.0.0",
+    "ComponentDescription": "A component that installs the ONNX Runtime",
+    "ComponentPublisher": "Amazon",
+    "Manifests": [
+      {
+        "Platform": {
+          "os": "linux"
+        },
+        "Lifecycle": {
+           "Install": {
+            "RequiresPrivilege": true,
+            "Script": "python3 -m pip install numpy protobuf onnx==1.13.0 onnxruntime==1.13.1",
+            "timeout": "900"
+          }
+        }
+      }
+        ]
+      }
