@@ -27,31 +27,31 @@ git clone https://github.com/aws-samples/aws-iot-gg-onnx-runtime
 ```
 2.	Navigate to the artifacts folder and zip the files
 ```bash
-    cd artifacts/com.demo.onnx-imageclassification/1.0.0 
-    zip -r greengrass-onnx.zip . 
+cd artifacts/com.demo.onnx-imageclassification/1.0.0 
+zip -r greengrass-onnx.zip . 
 ```
 3.	Upload the zip file to the Amazon S3 bucket that you created in the initial setup.
 ```bash
-    aws s3 cp greengrass-onnx.zip s3://{YOUR-S3-BUCKET}/greengrass-onnx.zip
+aws s3 cp greengrass-onnx.zip s3://{YOUR-S3-BUCKET}/greengrass-onnx.zip
 ```
 To publish the components, perform the following steps: 
 1.	Navigate to the /recipes folder and edit the file *com.demo.onnx-imageclassification-1.0.0.json*
 2.	Replace the Amazon S3 bucket name in artifacts URI with your own bucket name defined above
 ```json
-    "Artifacts": [
-            {
-              "URI": "s3://{YOUR-S3-BUCKET}/greengrass-onnx.zip",
-              "Unarchive": "ZIP"
-            }
-          ]
+"Artifacts": [
+    {
+      "URI": "s3://{YOUR-S3-BUCKET}/greengrass-onnx.zip",
+      "Unarchive": "ZIP"
+    }
+  ]
 ```
 3.	Publish the ONNX Runtime component.
 ```bash
-    aws greengrassv2 create-component-version --inline-recipe fileb://com.demo.onnxruntime-1.0.0.json
+aws greengrassv2 create-component-version --inline-recipe fileb://com.demo.onnxruntime-1.0.0.json
 ```
 4.	Publish the component that will perform the image classification and that has a dependency on the ONNX Runtime.
 ```bash
-    aws greengrassv2 create-component-version --inline-recipe fileb://com.demo.onnx-imageclassification-1.0.0.json
+aws greengrassv2 create-component-version --inline-recipe fileb://com.demo.onnx-imageclassification-1.0.0.json
 ```
 5.	To verify that the components were published successfully, navigate to AWS IoT Console , go to Greengrass Devices >> Components. In My Components tab, you should see the two components that you just published.
 ### Deploy the component to a target device
