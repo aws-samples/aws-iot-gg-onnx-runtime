@@ -1,3 +1,21 @@
+"""
+Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ SPDX-License-Identifier: MIT-0
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this
+software and associated documentation files (the "Software"), to deal in the Software
+without restriction, including without limitation the rights to use, copy, modify,
+merge, publish, distribute, sublicense, and/or sell copies of the Software, and to
+permit persons to whom the Software is furnished to do so.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+"""
+
 import os
 import time
 import json
@@ -46,12 +64,12 @@ def predict(modelPath, labelsPath, image):
     start = time.time()
     raw_result = session.run([], {input_name: input_data})
     end = time.time()
-    res = postprocess(raw_result)
 
+    #calculating the inference time and determining the label for classification
     inference_time = np.round((end - start) * 1000, 2)
-    idx = np.argmax(res)
+    idx = np.argmax(postprocess(raw_result))
     inferenceResult = {
-        "label" : labels[idx],
+        "label": labels[idx],
         "inference_time": inference_time
         }
     
@@ -81,18 +99,17 @@ def softmax(x):
 def postprocess(result):
     return softmax(np.array(result)).tolist()
 
+while True:
 #loops through all the images in the folder, classifies them and sends all the results to the IoT Core topic
-for img in os.listdir(imagesPath):
-    request = PublishToIoTCoreRequest()
-    request.topic_name = topic
-    image = Image.open(imagesPath + "/" + img)
-    pred = predict(modelPath, labelsPath, image)
-    request.payload = pred.encode()
-    request.qos = qos
-    operation = ipc_client.new_publish_to_iot_core()
-    operation.activate(request)
-    future_response = operation.get_response().result(timeout=5)
-    print("successfully published message: ", future_response)
-    time.sleep(5)
-
-
+    for img in os.listdir(imagesPath):
+        request = PublishToIoTCoreRequest()
+        request.topic_name = topic
+        image = Image.open(imagesPath + "/" + img)
+        pred = predict(modelPath, labelsPath, image)
+        request.payload = pred.encode()
+        request.qos = qos
+        operation = ipc_client.new_publish_to_iot_core()
+        operation.activate(request)
+        future_response = operation.get_response().result(timeout=5)
+        print("successfully published message: ", future_response)
+        time.sleep(5)
