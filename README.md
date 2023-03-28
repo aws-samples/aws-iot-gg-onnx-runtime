@@ -8,7 +8,6 @@ To be able to run through the steps in this blog post, you will need:
  - Basic knowledge of AWS IoT Core and AWS IoT Greengrass 
  - Basic understanding of machine learning concepts 	
  - An AWS Account and an AWS Identity and Access Management (IAM) user with the necessary permissions to create and manage AWS resources
-   permissions for creating and managing AWS resources
  - AWS Command Line Interface (AWS CLI) and Git installed	
 
 ### Initial Setup
