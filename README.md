@@ -1,5 +1,5 @@
 
-# Optimizing Image Classification on AWS IoT Greengrass using ONNX Runtime
+# Optimize Image Classification on AWS IoT Greengrass using ONNX Runtime
 
 This repository contains the necessary files for building and deploying a custom AWS IoT Greengrass component for image classification that uses the ONNX Runtime. The component uses a pre-trained ResNet-50 neural network in ONNX format to perform inference on some sample images and the classification results are published to AWS IoT Core to the *demo/onnx* topic.
 
@@ -81,7 +81,7 @@ To test that the results have been published successfully to the topic, go to AW
 It is a best practice to delete resources you no longer want to use. To avoid incurring additional costs on your AWS account, perform the following steps:
 1. Delete the AWS Cloud9 environment where the AWS IoT Greengrass software was installed
 ```bash
-aws cloud9 delete-environment -environment-id <your environment id>
+aws cloud9 delete-environment --environment-id <your environment id>
 ```
 2. Delete the Greengrass core device:
 ```bash
